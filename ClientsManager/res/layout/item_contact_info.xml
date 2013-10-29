@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp">
+    
+    <LinearLayout 
+        android:id="@+id/controls_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true">
+        
+    </LinearLayout>
+    
+    <Spinner 
+        android:id="@+id/contact_type"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@id/controls_holder"
+        android:layout_marginLeft="5dp"
+        />
+    
+    <EditText 
+        android:id="@+id/contact_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_toRightOf="@id/contact_type"
+        android:layout_toLeftOf="@+id/contact_btn"
+        />
+    
+    <ImageButton 
+        android:id="@+id/contact_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
+
+</RelativeLayout>
