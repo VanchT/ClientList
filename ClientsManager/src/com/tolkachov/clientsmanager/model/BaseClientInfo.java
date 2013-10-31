@@ -1,7 +1,6 @@
 package com.tolkachov.clientsmanager.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.database.Cursor;
 
 public class BaseClientInfo {
 
@@ -31,6 +30,11 @@ public class BaseClientInfo {
 		this.mBirthday = birthday;
 		this.mStatus = status;
 		this.mRelationType = relationType;
+	}
+	
+	public BaseClientInfo(Cursor cursor){
+		super();
+		//TODO: Not implemented yet
 	}
 
 	/**

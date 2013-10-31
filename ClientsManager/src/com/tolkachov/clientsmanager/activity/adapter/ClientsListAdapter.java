@@ -1,59 +1,55 @@
 package com.tolkachov.clientsmanager.activity.adapter;
 
-import java.util.List;
-
-import com.tolkachov.clientsmanager.R;
-import com.tolkachov.clientsmanager.model.BaseClientInfo;
-import com.tolkachov.clientsmanager.viewmodel.ClientListItemBinder;
-
 import android.content.Context;
+import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
-public class ClientsListAdapter extends BaseAdapter {
+import com.tolkachov.clientsmanager.R;
+import com.tolkachov.clientsmanager.data.DatabaseHelper;
+import com.tolkachov.clientsmanager.model.BaseClientInfo;
+import com.tolkachov.clientsmanager.viewmodel.ClientListItemBinder;
 
-	private Context mContext;
-	private List<BaseClientInfo> mItems; 
-	
-	public ClientsListAdapter(Context context, List<BaseClientInfo> items){
-		super();
-		this.mContext = context;
-		this.mItems = items;
-	}
-	
-	@Override
-	public int getCount() {
-		return mItems.size();
+public class ClientsListAdapter extends CursorAdapter {
+
+
+	public ClientsListAdapter(Context context, Cursor c) {
+		super(context, c, false);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public Object getItem(int position) {
-		return mItems.get(position);
+	public void bindView(View view, Context context, Cursor cursor) {
+		ClientListItemBinder binder = null;
+		BaseClientInfo clientInfo = new BaseClientInfo(cursor);
+		if (view.getTag() == null) {
+			binder = new ClientListItemBinder(view, clientInfo);
+			binder.bind();
+			view.setTag(binder);
+		} else {
+			binder = (ClientListItemBinder)view.getTag();
+			binder.bind(clientInfo);
+		}		
 	}
 
+	@Override
+	public View newView(Context context, Cursor cursor, ViewGroup parent) {
+		LayoutInflater inflater = LayoutInflater.from(context);
+		return inflater.inflate(R.layout.item_client_list, parent, false);
+	}
+	
 	@Override
 	public long getItemId(int position) {
-		return mItems.get(position).getClientId();
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView == null){
-			convertView = LayoutInflater.from(mContext).inflate(R.layout.item_client_list, parent);
-		}
-		ClientListItemBinder binder = null;
-		if (convertView.getTag() == null) {
-			binder = new ClientListItemBinder(convertView, mItems.get(position));
-			binder.bind();
-			convertView.setTag(binder);
+		Cursor cursor = getCursor();
+		if (cursor == null) {
+			return super.getItemId(position);
 		} else {
-			binder = (ClientListItemBinder)convertView.getTag();
-			binder.bind(mItems.get(position));
+			cursor.moveToPosition(position);
+			long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ID));
+			return id;
 		}
-		
-		return convertView;
 	}
 
 }
