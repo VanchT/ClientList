@@ -10,10 +10,14 @@ import java.net.HttpURLConnection;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -357,4 +361,27 @@ public final class Util {
 		return bitmap;
 	}
     
+	public static Date convertToDate(String dateString, String formatString){
+	    SimpleDateFormat dateFormat = new SimpleDateFormat(formatString, Locale.getDefault());
+	    Date convertedDate = new Date();
+	    try {
+	        convertedDate = dateFormat.parse(dateString);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return convertedDate;
+	}
+
+	public static boolean compareByManthAndDay(String dateString){
+		boolean resalt = false;
+		Calendar currentCalendar = Calendar.getInstance();
+		Date birthday = Util.convertToDate(dateString, "MM/dd/yyyy");
+		Calendar birthdayCalendar = Calendar.getInstance();
+		birthdayCalendar.setTime(birthday);
+		if (currentCalendar.get(Calendar.MONTH) == birthdayCalendar.get(Calendar.MONTH) &&
+				currentCalendar.get(Calendar.DAY_OF_MONTH) == birthdayCalendar.get(Calendar.DAY_OF_MONTH)){
+			resalt = true;
+		}
+		return resalt;
+	}
 }

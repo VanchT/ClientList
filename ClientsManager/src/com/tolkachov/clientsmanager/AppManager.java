@@ -61,4 +61,7 @@ public class AppManager {
 		return mLoaderId++;
 	}
 
+	public static int getResourceId(String resName, String resType){
+		return mAppContext.getResources().getIdentifier(resName, resType, mAppContext.getPackageName());
+	}
 }

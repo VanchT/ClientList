@@ -1,6 +1,5 @@
-package com.tolkachov.clientsmanager.data;
+package com.tolkachov.clientsmanager.util;
 
-import com.tolkachov.clientsmanager.util.Util;
 
 public class QueryBuilder{
 	

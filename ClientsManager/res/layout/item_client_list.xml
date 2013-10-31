@@ -26,7 +26,7 @@
                 android:src="@drawable/ic_launcher"/>
             
             <ImageView 
-                android:id="@+id/client_miting_indicator"
+                android:id="@+id/client_event_indicator"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/ic_launcher"/>
@@ -46,14 +46,13 @@
             android:layout_marginLeft="55dp"
             android:layout_marginTop="2dp"
             android:text="Trololo Trolololololololololo Trololoololo"
-            android:layout_toLeftOf="@+id/client_status_img"
+            android:layout_toLeftOf="@+id/client_status_indicator"
             android:layout_marginRight="5dp"/>
         
-        <ImageView 
-            android:id="@+id/client_status_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher"
+        <com.tolkachov.clientsmanager.widget.LinearIndicator 
+           	android:id="@+id/client_status_indicator"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"/>
         
@@ -62,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Холодный"
-            android:layout_below="@+id/client_status_img"
+            android:layout_below="@+id/client_status_indicator"
             android:layout_alignParentRight="true"
             android:textSize="10sp"
             android:layout_marginTop="2dp"/>

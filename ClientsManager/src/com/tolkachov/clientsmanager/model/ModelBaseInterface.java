@@ -2,7 +2,7 @@ package com.tolkachov.clientsmanager.model;
 
 import android.database.Cursor;
 
-import com.tolkachov.clientsmanager.data.QueryBuilder;
+import com.tolkachov.clientsmanager.util.QueryBuilder;
 
 public interface ModelBaseInterface {
 	

@@ -1,22 +1,29 @@
 package com.tolkachov.clientsmanager.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BaseClientInfo {
 
+	public static final String DEFAULT_CLIENT_STATUS = "false:false,false:false,false:false,false:false,false:false,false:false,";
+	
 	protected long mClientId;
 	protected String mClientName;
 	protected String mPhotoUrl;
 	protected String mBirthday;
-	private int mStatus;
+	private String mStatus;
 	private String mRelationType;
+	
+	private OnStatusChangeListener mStatusChangeListener;
 
 	public BaseClientInfo(String clientName){
 		super();
 		this.mClientName = clientName;
-		this.mStatus = 0;
+		this.mStatus = DEFAULT_CLIENT_STATUS;
 	}
 	
 	public BaseClientInfo(long clientId, String clientName, String photoUrl,
-			String birthday, int status, String relationType) {
+			String birthday, String status, String relationType) {
 		super();
 		this.mClientId = clientId;
 		this.mClientName = clientName;
@@ -68,8 +75,13 @@ public class BaseClientInfo {
 	/**
 	 * @return the mStatus
 	 */
-	public int getStatus() {
+	public String getStatus() {
 		return mStatus;
+	}
+	
+	protected void setStatus(String status){
+		this.mStatus = status;
+		mStatusChangeListener.onStatusChange(status);
 	}
 
 	/**
@@ -86,4 +98,13 @@ public class BaseClientInfo {
 		this.mRelationType = mRelationType;
 	}
 
+	public void setOnStatusChangeListener(OnStatusChangeListener listener){
+		this.mStatusChangeListener = listener;
+	}
+	
+	public static interface OnStatusChangeListener {
+		
+		public void onStatusChange(String newstatus);
+		
+	}
 }

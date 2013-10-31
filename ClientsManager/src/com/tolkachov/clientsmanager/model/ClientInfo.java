@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tolkachov.clientsmanager.AppManager;
+import com.tolkachov.clientsmanager.model.BaseClientInfo.OnStatusChangeListener;
 
 public class ClientInfo {
 
@@ -15,7 +16,7 @@ public class ClientInfo {
 	
 	private ClientInfoListener mListener;
 	
-	public ClientInfo(String clientName){
+ 	public ClientInfo(String clientName){
 		super();
 		this.mBaseClientInfo = new BaseClientInfo(clientName); 
 		this.mContacts = new ArrayList<ContactInfo>();
@@ -137,8 +138,13 @@ public class ClientInfo {
 	/**
 	 * @return the mStatus
 	 */
-	public int getStatus() {
+	public String getStatus() {
 		return mBaseClientInfo.getStatus();
+	}
+	
+	public void setStatus(String status){
+		this.mBaseClientInfo.setStatus(status);
+		mListener.updateClientStatus(this);
 	}
 
 	/**
@@ -149,6 +155,10 @@ public class ClientInfo {
 	}
 
 	//=======================================
+	
+	public void setOnStatusChangeListener(OnStatusChangeListener listener){
+		this.mBaseClientInfo.setOnStatusChangeListener(listener);
+	}
 	
 	public static interface ClientInfoListener{
 		
@@ -167,5 +177,6 @@ public class ClientInfo {
 		public List<StatusInfo> loadClientStatuses(ClientInfo clientInfo);
 		
 	}
+	
 	
 }

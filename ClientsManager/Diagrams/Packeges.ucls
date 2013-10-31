@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <package id="1" language="java" name="com.tolkachov.clientsmanager.data" project="ClientsManager" 
+    file="/ClientsManager/src/com/tolkachov/clientsmanager/data" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="810" y="568"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="com.tolkachov.clientsmanager.model" project="ClientsManager" 
+    file="/ClientsManager/src/com/tolkachov/clientsmanager/model" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="810" y="329"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="com.tolkachov.clientsmanager.viewmodel" project="ClientsManager" 
+    file="/ClientsManager/src/com/tolkachov/clientsmanager/viewmodel" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="328" y="328"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="com.tolkachov.clientsmanager.activity" project="ClientsManager" 
+    file="/ClientsManager/src/com/tolkachov/clientsmanager/activity" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="589" y="134"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <dependency id="5">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="6">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="7">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

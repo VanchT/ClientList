@@ -7,14 +7,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.YuvImage;
 
-import com.tolkachov.clientsmanager.data.QueryBuilder.QueryParams;
-import com.tolkachov.clientsmanager.data.QueryBuilder.QueryParams.ParameterType;
 import com.tolkachov.clientsmanager.model.ClientInfo;
 import com.tolkachov.clientsmanager.model.ContactInfo;
 import com.tolkachov.clientsmanager.model.ModelBaseInterface;
 import com.tolkachov.clientsmanager.model.StatusInfo;
+import com.tolkachov.clientsmanager.util.QueryBuilder;
 import com.tolkachov.clientsmanager.util.Util;
 
 public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfoListener,
@@ -174,6 +172,10 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 			ContentValues values = new ContentValues();
 			values.put(DatabaseHelper.CLIENT_NAME, clientInfo.getClientName());
 			values.put(DatabaseHelper.CLIENT_STATUS_SUM, clientInfo.getStatus());
+			values.put(DatabaseHelper.CLIENT_ABOUT, clientInfo.getClientAbout());
+			values.put(DatabaseHelper.CLIENT_BIRTHDAY, clientInfo.getBirthday());
+			values.put(DatabaseHelper.CLIENT_PHOTO_LINK, clientInfo.getPhotoUrl());
+			values.put(DatabaseHelper.CLIENT_PROFESSION, clientInfo.getClientProfession());
 			long id = db.insert(DatabaseHelper.TABLE_CLIENTS, null, values);
 			if (id == -1) {
 				throw new Exception("The Client was not added!");
