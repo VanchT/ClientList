@@ -1,11 +1,13 @@
 package com.tolkachov.clientsmanager.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tolkachov.clientsmanager.AppManager;
 
-public class ClientInfo extends BaseClientInfo {
+public class ClientInfo {
 
+	private BaseClientInfo mBaseClientInfo;
 	private String mClientProfession;
 	private String mClientAbout;
 	private List<ContactInfo> mContacts;
@@ -13,10 +15,17 @@ public class ClientInfo extends BaseClientInfo {
 	
 	private ClientInfoListener mListener;
 	
-	public ClientInfo(long clientId, String clientName, String photoUrl,
-			String birthday, String clientProfession, String clientAbout,
-			int status, String relationType) {
-		super(clientId, clientName, photoUrl, birthday, status, relationType);
+	public ClientInfo(String clientName){
+		super();
+		this.mBaseClientInfo = new BaseClientInfo(clientName); 
+		this.mContacts = new ArrayList<ContactInfo>();
+		this.mStatuses = new ArrayList<StatusInfo>();
+	}
+	
+	public ClientInfo(BaseClientInfo baseClientInfo, String clientProfession, 
+			String clientAbout,	int status, String relationType) {
+		super();
+		this.mBaseClientInfo = baseClientInfo;
 		this.mClientProfession = clientProfession;
 		this.mClientAbout = clientAbout;
 		
@@ -35,6 +44,7 @@ public class ClientInfo extends BaseClientInfo {
 	 */
 	public void setClientProfession(String clientProfession) {
 		this.mClientProfession = clientProfession;
+		mListener.updateClientProfession(this);
 	}
 
 	/**
@@ -49,6 +59,7 @@ public class ClientInfo extends BaseClientInfo {
 	 */
 	public void setClientAbout(String clientAbout) {
 		this.mClientAbout = clientAbout;
+		mListener.updateClientAbout(this);
 	}
 
 	/**
@@ -78,27 +89,67 @@ public class ClientInfo extends BaseClientInfo {
 	public void setStatuses(List<StatusInfo> statuses) {
 		this.mStatuses = statuses;
 	}
+			
+	// ========== BaseClientInfo ===========
+	
+	/**
+	 * @return the mClientId
+	 */
+	public long getClientId() {
+		return mBaseClientInfo.getClientId();
+	}
+	
+	public void setClientId(long id){
+		mBaseClientInfo.setClientId(id);
+	}
 
-	@Override
+	/**
+	 * @return the mClientName
+	 */
+	public String getClientName() {
+		return mBaseClientInfo.getClientName();
+	}
+
+	/**
+	 * @return the mPhotoUrl
+	 */
+	public String getPhotoUrl() {
+		return mBaseClientInfo.getPhotoUrl();
+	}
+
+	/**
+	 * @return the mBirthday
+	 */
+	public String getBirthday() {
+		return mBaseClientInfo.getBirthday();
+	}
+
 	public void setBirthday(String birthday) {
-		super.setBirthday(birthday);
+		mBaseClientInfo.setBirthday(birthday);
 		mListener.updateClientBirthday(this);
 	}
 	
-	@Override
 	public void setRelationType(String mRelationType) {
-		super.setRelationType(mRelationType);
+		mBaseClientInfo.setRelationType(mRelationType);
 		mListener.updateClientRelationType(this);
 	}
-	
-	public void onUpdateClientProfession(){
-		mListener.updateClientProfession(this);
+
+	/**
+	 * @return the mStatus
+	 */
+	public int getStatus() {
+		return mBaseClientInfo.getStatus();
 	}
-	
-	public void onUpdateClientAbout(){
-		mListener.updateClientAbout(this);
+
+	/**
+	 * @return the mRelationType
+	 */
+	public String getRelationType() {
+		return mBaseClientInfo.getRelationType();
 	}
-		
+
+	//=======================================
+	
 	public static interface ClientInfoListener{
 		
 		public void updateClientBirthday(ClientInfo clientInfo);
@@ -107,7 +158,7 @@ public class ClientInfo extends BaseClientInfo {
 		
 		public void updateClientAbout(ClientInfo clientInfo);
 		
-		public void updatelientStatus(ClientInfo clientInfo);
+		public void updateClientStatus(ClientInfo clientInfo);
 		
 		public void updateClientRelationType(ClientInfo clientInfo);
 		

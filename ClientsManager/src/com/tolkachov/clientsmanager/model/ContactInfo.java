@@ -5,14 +5,16 @@ import com.tolkachov.clientsmanager.AppManager;
 public class ContactInfo {
 
 	private long mContactId;
+	private long mClientId;
 	private String mContactType;
 	private String mContactValue;
 	
 	private ContactInfoListener mListener;
 	
-	public ContactInfo(long id, String contactType, String contactValue) {
+	public ContactInfo(long id, long clientId, String contactType, String contactValue) {
 		super();
 		this.mContactId = id;
+		this.mClientId = clientId;
 		this.mContactType = contactType;
 		this.mContactValue = contactValue;
 		
@@ -25,7 +27,15 @@ public class ContactInfo {
 	public long getContactId() {
 		return mContactId;
 	}
+	
+	public void setContactId(long id){
+		this.mClientId = id;
+	}
 
+	public long getClientId(){
+		return mClientId;
+	}
+	
 	/**
 	 * @return the mContactType
 	 */
@@ -38,6 +48,7 @@ public class ContactInfo {
 	 */
 	public void setContactType(String mContactType) {
 		this.mContactType = mContactType;
+		mListener.updateContactType(this);
 	}
 
 	/**
@@ -52,10 +63,7 @@ public class ContactInfo {
 	 */
 	public void setContactValue(String mContactValue) {
 		this.mContactValue = mContactValue;
-	}
-
-	public void onUpdateContactInfo(){
-		mListener.updateContactInfo(this);
+		mListener.updateContactValue(this);
 	}
 	
 	public void onAddContactInfo(){
@@ -68,8 +76,10 @@ public class ContactInfo {
 	
 	public static interface ContactInfoListener{
 		
-		public void updateContactInfo(ContactInfo contactInfo);
+		public void updateContactValue(ContactInfo contactInfo);
 		
+		public void updateContactType(ContactInfo contactInfo);
+				
 		public void addContactInfo(ContactInfo contactInfo);
 		
 		public void deleteContactInfo(ContactInfo contactInfo);

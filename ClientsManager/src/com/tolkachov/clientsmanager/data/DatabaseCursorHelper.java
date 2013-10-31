@@ -7,6 +7,10 @@ public class DatabaseCursorHelper {
 
 	public FilterCursorWrapper getFilteredCursor(SQLiteDatabase db, String query, String filter, String[] columnNames) {
 		Cursor cursor = db.rawQuery(query, null);
+		return getFilteredCursor(cursor, filter, columnNames);
+	}
+	
+	public FilterCursorWrapper getFilteredCursor(Cursor cursor, String filter, String[] columnNames) {
 		int[] columns = new int[columnNames.length];
 		for (int i = 0; i < columnNames.length; i++){
 			columns[i] = cursor.getColumnIndex(columnNames[i]);
@@ -15,7 +19,7 @@ public class DatabaseCursorHelper {
 		return cursorWrapper;
 	}
 	
-	public Cursor getCursor(SQLiteDatabase db, String query){
+	public Cursor getCursorRawQuery(SQLiteDatabase db, String query){
 		return db.rawQuery(query, null);
 	}
 	

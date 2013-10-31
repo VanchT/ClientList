@@ -14,11 +14,20 @@ public abstract class ModelViewBinder<T> {
 	
 	public abstract void bind();
 	
+	public void bind(T newDataSource){
+		this.mDataSource = newDataSource;
+		bind();	
+	}
+	
 	protected View getView(){
 		return this.mView;
 	}
 	
 	protected T getDataSource(){
 		return this.mDataSource;
+	}
+	
+	protected void setDataSource(T newDataSource){
+		mDataSource = newDataSource;
 	}
 }

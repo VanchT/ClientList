@@ -9,6 +9,12 @@ public class BaseClientInfo {
 	private int mStatus;
 	private String mRelationType;
 
+	public BaseClientInfo(String clientName){
+		super();
+		this.mClientName = clientName;
+		this.mStatus = 0;
+	}
+	
 	public BaseClientInfo(long clientId, String clientName, String photoUrl,
 			String birthday, int status, String relationType) {
 		super();
@@ -17,7 +23,7 @@ public class BaseClientInfo {
 		this.mPhotoUrl = photoUrl;
 		this.mBirthday = birthday;
 		this.mStatus = status;
-		this.setRelationType(relationType);
+		this.mRelationType = relationType;
 	}
 
 	/**
@@ -25,6 +31,10 @@ public class BaseClientInfo {
 	 */
 	public long getClientId() {
 		return mClientId;
+	}
+	
+	public void setClientId(long id){
+		this.mClientId = id;
 	}
 
 	/**

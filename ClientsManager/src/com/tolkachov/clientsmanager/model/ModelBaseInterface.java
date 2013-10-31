@@ -2,13 +2,15 @@ package com.tolkachov.clientsmanager.model;
 
 import android.database.Cursor;
 
-import com.tolkachov.clientsmanager.data.FilterParameters;
+import com.tolkachov.clientsmanager.data.QueryBuilder;
 
 public interface ModelBaseInterface {
-
-	public Cursor loadClientsList(FilterParameters[] params);
 	
-	public void addClient(ClientInfo clientInfo);
+	public Cursor loadClientsList(QueryBuilder.QueryParams[] params, String[] columns);
+	
+	public Cursor loadFilteredClientsList(String[] columns, String filter);
+	
+	public ClientInfo addClient(ClientInfo clientInfo);
 	
 	public void deleteClient(ClientInfo clientInfo);
 }

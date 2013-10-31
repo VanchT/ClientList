@@ -3,6 +3,7 @@ package com.tolkachov.clientsmanager.activity;
 import com.tolkachov.clientsmanager.R;
 import com.tolkachov.clientsmanager.R.layout;
 import com.tolkachov.clientsmanager.R.menu;
+import com.tolkachov.clientsmanager.model.StatusInfo;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,7 +18,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		CheckBox cb = new CheckBox(this);
+		
 		
 	}
 

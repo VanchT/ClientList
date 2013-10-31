@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ CLIENT_PROFESSION + " text, "
 			+ CLIENT_ABOUT + " text, "
 			+ CLIENT_STATUS_SUM + " integer not null, "
-			+ RELATIOIN_ID + " integer not null, "
+			+ RELATIOIN_ID + " integer, "
 			+ CLIENT_PHOTO_LINK + " text, "
 			+ "foreign key (" + RELATIOIN_ID + ") references " + TABLE_RELATION_TYPES + "(" + ID + "), "
 			+ ");";
@@ -147,9 +147,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values ('Skype:');");
 		
 		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Терминизация', 10);");
+		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Тренинг', 10);");
 		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Личная встреча', 10);");
 		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Презентация', 10);");
-		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Тренинг', 10);");
 		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Контракт', 50);");
 		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Семинар', 100);");
 		

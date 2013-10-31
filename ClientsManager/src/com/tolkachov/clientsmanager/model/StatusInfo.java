@@ -4,7 +4,9 @@ import com.tolkachov.clientsmanager.AppManager;
 
 public class StatusInfo {
 
+	
 	private long mStatusInfoId;
+	private long mClientId;
 	private String mStatusName;
 	private int mStatusWeight;
 	private boolean mStatusState;
@@ -13,15 +15,15 @@ public class StatusInfo {
 	private StatusInfoListener mListener;
 	private OnStatusChangeListener mStatusChangeListener;
 	
-	public StatusInfo(long statusInfoId, String statusName,
+	public StatusInfo(long statusInfoId, long clientId, String statusName,
 			int statusWeight, boolean statusState, boolean isMine) {
 		super();
 		this.mStatusInfoId = statusInfoId;
+		this.mClientId = clientId;
 		this.mStatusName = statusName;
 		this.mStatusWeight = statusWeight;
 		this.mStatusState = statusState;
 		this.mIsMine = isMine;
-		
 		mListener = AppManager.getDatabaseWorker();
 	}
 
@@ -30,6 +32,14 @@ public class StatusInfo {
 	 */
 	public long getStatusInfoId() {
 		return mStatusInfoId;
+	}
+	
+	public void setStatusInfoId(long id){
+		this.mStatusInfoId = id;
+	}
+	
+	public long getClientId(){
+		return mClientId;
 	}
 
 	/**

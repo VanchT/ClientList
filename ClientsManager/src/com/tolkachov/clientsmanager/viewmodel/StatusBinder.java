@@ -22,6 +22,9 @@ public class StatusBinder extends ModelViewBinder<StatusInfo> {
 	@Override
 	public void bind() {
 		
+		//mMeState.setOnCheckedChangeListener(null);
+		//mStatusState.setOnCheckedChangeListener(null);		
+		
 		mMeState.setChecked(getDataSource().isMine());
 		mStatusState.setChecked(getDataSource().getStatusState());
 		mStatusState.setText(getDataSource().getStatusName());
