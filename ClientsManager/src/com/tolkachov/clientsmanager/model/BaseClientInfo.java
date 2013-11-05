@@ -1,5 +1,8 @@
 package com.tolkachov.clientsmanager.model;
 
+import com.tolkachov.clientsmanager.data.DatabaseHelper;
+import com.tolkachov.clientsmanager.util.Util;
+
 import android.database.Cursor;
 
 public class BaseClientInfo {
@@ -28,13 +31,22 @@ public class BaseClientInfo {
 		this.mClientName = clientName;
 		this.mPhotoUrl = photoUrl;
 		this.mBirthday = birthday;
-		this.mStatus = status;
+		if (Util.isNullOrEmpty(status)){
+			this.mStatus = DEFAULT_CLIENT_STATUS;
+		} else {
+			this.mStatus = status;
+		}
 		this.mRelationType = relationType;
 	}
 	
 	public BaseClientInfo(Cursor cursor){
 		super();
-		//TODO: Not implemented yet
+		this.mClientId = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ID));
+		this.mClientName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_NAME));
+		this.mPhotoUrl = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_PHOTO_LINK));
+		this.mBirthday = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_BIRTHDAY));
+		this.mStatus = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_STATUS_SUM));
+		this.mRelationType = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TYPE_NAME));
 	}
 
 	/**

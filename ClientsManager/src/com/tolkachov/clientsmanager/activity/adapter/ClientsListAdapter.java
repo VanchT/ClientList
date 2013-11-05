@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.tolkachov.clientsmanager.R;
 import com.tolkachov.clientsmanager.data.DatabaseHelper;
 import com.tolkachov.clientsmanager.model.BaseClientInfo;
+import com.tolkachov.clientsmanager.util.Logger;
 import com.tolkachov.clientsmanager.viewmodel.ClientListItemBinder;
 
 public class ClientsListAdapter extends CursorAdapter {
@@ -17,11 +18,11 @@ public class ClientsListAdapter extends CursorAdapter {
 
 	public ClientsListAdapter(Context context, Cursor c) {
 		super(context, c, false);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
+		
 		ClientListItemBinder binder = null;
 		BaseClientInfo clientInfo = new BaseClientInfo(cursor);
 		if (view.getTag() == null) {
@@ -42,6 +43,7 @@ public class ClientsListAdapter extends CursorAdapter {
 	
 	@Override
 	public long getItemId(int position) {
+		Logger.d("", "ClientsListAdapter::getItemId()");
 		Cursor cursor = getCursor();
 		if (cursor == null) {
 			return super.getItemId(position);
@@ -50,6 +52,13 @@ public class ClientsListAdapter extends CursorAdapter {
 			long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ID));
 			return id;
 		}
+	}
+	
+	@Override
+	public Object getItem(int position) {
+		Cursor cursor = getCursor();
+		cursor.moveToPosition(position);
+		return new BaseClientInfo(cursor);
 	}
 
 }

@@ -9,10 +9,20 @@ public class QueryBuilder{
 	private String mHeaving = "";
 	private String mLimit = "";
 	private String mOffset = "";
+	private String mDefaultGroupBy = "";
 	
 	private short mWhereCount = 0;
 	private short mGroupByCount = 0;
 	private short mLikeCount = 0;
+	
+	public QueryBuilder(){
+		super();
+	};
+	
+	public QueryBuilder(String defaultGroupByColumn){
+		super();
+		this.mDefaultGroupBy = " group by " + defaultGroupByColumn + " ";
+	};
 	
 	private void handleParameter(QueryParams params){
 		switch (params.getParamType()) {
@@ -85,12 +95,15 @@ public class QueryBuilder{
 			}
 		}
 		result += "select ";
-		for (int i = 1; i < columns.length; i++){
+		for (int i = 0; i < columns.length; i++){
 			result += columns[i];
 			if (i < columns.length - 1) result += ", ";
 		}
 		result += " from " + fromTable;
-		result = mWhere + mGroupBy + mHeaving + mOrderBy + mLimit + mOffset;
+		if (Util.isNullOrEmpty(mGroupBy) && !Util.isNullOrEmpty(mDefaultGroupBy)){
+			mGroupBy = mDefaultGroupBy;
+		}
+		result += mWhere + mGroupBy + mHeaving + mOrderBy + mLimit + mOffset;
 		return result;
 	}	
 	

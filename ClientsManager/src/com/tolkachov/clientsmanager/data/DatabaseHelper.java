@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ CLIENT_STATUS_SUM + " text not null, "
 			+ RELATIOIN_ID + " integer, "
 			+ CLIENT_PHOTO_LINK + " text, "
-			+ "foreign key (" + RELATIOIN_ID + ") references " + TABLE_RELATION_TYPES + "(" + ID + "), "
+			+ "foreign key (" + RELATIOIN_ID + ") references " + TABLE_RELATION_TYPES + "(" + ID + ")"
 			+ ");";
 	
 	private static final String CREATE_CONTACTS_TABLE_STRING = "("
@@ -83,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ CONTACT_VALUE + " text not null, "
 			+ TYPE_ID + " integer not null, "
 			+ "foreign key (" + CLIENT_ID + ") references " + TABLE_CLIENTS + "(" + ID + "), "
-			+ "foreign key (" + TYPE_ID + ") references " + TABLE_CONTACT_TYPES + "(" + ID + "), "
+			+ "foreign key (" + TYPE_ID + ") references " + TABLE_CONTACT_TYPES + "(" + ID + ")"
 			+ ");";
 	
 	private static final String CREATE_CLIENTS_STATUSES_TABLE_STRING = "("
@@ -93,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ STATUS_STATE + " integer not null, "		//boolean
 			+ CLIENT_IS_MINE + " integer not null, "	//boolean
 			+ "foreign key (" + CLIENT_ID + ") references " + TABLE_CLIENTS + "(" + ID + "), "
-			+ "foreign key (" + STATUS_ID + ") references " + TABLE_STATUSES + "(" + ID + "), "
+			+ "foreign key (" + STATUS_ID + ") references " + TABLE_STATUSES + "(" + ID + ")"
 			+ ");";
 	
 	private static DatabaseHelper mInstance;
@@ -135,23 +135,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		db.execSQL("insert into " + TABLE_METADATA + " values ('ru-RU');");
 		
-		db.execSQL("insert into  " + TABLE_RELATION_TYPES + " values ('Близкий');");
-		db.execSQL("insert into  " + TABLE_RELATION_TYPES + " values ('Знакомый');");
-		db.execSQL("insert into  " + TABLE_RELATION_TYPES + " values ('Холодный');");
+		db.execSQL("insert into  " + TABLE_RELATION_TYPES + " values (null, 'Близкий');");
+		db.execSQL("insert into  " + TABLE_RELATION_TYPES + " values (null, 'Знакомый');");
+		db.execSQL("insert into  " + TABLE_RELATION_TYPES + " values (null, 'Холодный');");
 		
-		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values ('Моб. телефон:');");
-		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values ('Дом. телефон:');");
-		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values ('Раб. телефон:');");
-		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values ('Факс:');");
-		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values ('E-mail:');");
-		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values ('Skype:');");
+		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values (null, 'Моб. телефон:');");
+		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values (null, 'Дом. телефон:');");
+		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values (null, 'Раб. телефон:');");
+		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values (null, 'Факс:');");
+		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values (null, 'E-mail:');");
+		db.execSQL("insert into  " + TABLE_CONTACT_TYPES + " values (null, 'Skype:');");
 		
-		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Терминизация', 10);");
-		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Тренинг', 10);");
-		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Личная встреча', 10);");
-		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Презентация', 10);");
-		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Контракт', 50);");
-		db.execSQL("insert into  " + TABLE_STATUSES + " values ('Семинар', 100);");
+		db.execSQL("insert into  " + TABLE_STATUSES + " values (null, 'Терминизация', 10);");
+		db.execSQL("insert into  " + TABLE_STATUSES + " values (null, 'Тренинг', 10);");
+		db.execSQL("insert into  " + TABLE_STATUSES + " values (null, 'Личная встреча', 10);");
+		db.execSQL("insert into  " + TABLE_STATUSES + " values (null, 'Презентация', 10);");
+		db.execSQL("insert into  " + TABLE_STATUSES + " values (null, 'Контракт', 50);");
+		db.execSQL("insert into  " + TABLE_STATUSES + " values (null, 'Семинар', 100);");
 		
 	}
 

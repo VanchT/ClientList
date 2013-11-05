@@ -6,6 +6,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -35,7 +36,7 @@ public class LinearIndicator extends LinearLayout {
 	}
 	
 	private void init(){
-		mView = LayoutInflater.from(getContext()).inflate(R.layout.widget_linear_indicator, null);
+		mView = LayoutInflater.from(getContext()).inflate(R.layout.widget_linear_indicator, this, true);
 		
 		mFirstColumn = (ImageView)mView.findViewById(R.id.indicator_first);
 		mSecondColumn = (ImageView)mView.findViewById(R.id.indicator_second);

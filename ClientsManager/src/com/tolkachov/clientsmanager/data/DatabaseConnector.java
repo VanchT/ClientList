@@ -11,10 +11,11 @@ public class DatabaseConnector {
 
 	private static final String TAG = "DatabaseWorkerLog";
 	
+	private static DatabaseConnector mInstance;
 	private SQLiteDatabase mDatabase;
 	private DatabaseHelper mDatabaseHelper;
 	
-	public DatabaseConnector(Context context){
+	private DatabaseConnector(Context context){
 		Logger.registerTag(TAG, true);
 		mDatabaseHelper = DatabaseHelper.getInstance(context);
 	}
@@ -22,6 +23,13 @@ public class DatabaseConnector {
 	//Private methods
 	
 	//Public methods
+	
+	public static DatabaseConnector getInstance(Context context){
+		if (mInstance == null){
+			mInstance = new DatabaseConnector(context);
+		}
+		return mInstance;
+	}
 	
 	/**
 	 * Tries to open the database and returns the instance of the database.

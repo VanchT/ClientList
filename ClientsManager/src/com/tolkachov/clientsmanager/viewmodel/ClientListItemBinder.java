@@ -6,11 +6,12 @@ import android.widget.TextView;
 
 import com.tolkachov.clientsmanager.R;
 import com.tolkachov.clientsmanager.model.BaseClientInfo;
+import com.tolkachov.clientsmanager.util.Logger;
 import com.tolkachov.clientsmanager.util.Util;
 import com.tolkachov.clientsmanager.widget.LinearIndicator;
 
 public class ClientListItemBinder extends ModelViewBinder<BaseClientInfo> {
-
+	
 	private ImageView mIndicatorPhone;
 	private ImageView mIndicatorBirthday;
 	private ImageView mIndicatorEvent;
@@ -37,6 +38,7 @@ public class ClientListItemBinder extends ModelViewBinder<BaseClientInfo> {
 
 	@Override
 	public void bind() {
+		Logger.d("", "ClientListItemBinder::bind()");
 		BaseClientInfo client = getDataSource();
 		mClientName.setText(client.getClientName());
 		mClientRelation.setText(client.getRelationType());
@@ -62,7 +64,7 @@ public class ClientListItemBinder extends ModelViewBinder<BaseClientInfo> {
 		String[] statuses = getDataSource().getStatus().split(",");
 		for (int i = 0; i < statuses.length; i++){
 			String[] status = statuses[i].split(":");
-			if (Boolean.getBoolean(status[0])){
+			if (!Boolean.getBoolean(status[0])){
 				mClientStatus.setColumnImage(i + 1, R.drawable.bg_status_indicator_no);
 			} else {
 				if (Boolean.getBoolean(status[1])){

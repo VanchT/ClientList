@@ -39,16 +39,25 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 	private String mCachedQuery;
 	
 	private String[] mDefaultColumns = {
-			DatabaseHelper.TABLE_CLIENTS + "." + DatabaseHelper.ID,
-			DatabaseHelper.TABLE_CLIENTS + "." + DatabaseHelper.CLIENT_NAME,
-			DatabaseHelper.TABLE_CLIENTS + "." + DatabaseHelper.CLIENT_PHOTO_LINK,
-			DatabaseHelper.TABLE_CLIENTS + "." + DatabaseHelper.CLIENT_BIRTHDAY,
-			DatabaseHelper.TABLE_CLIENTS + "." + DatabaseHelper.CLIENT_STATUS_SUM,
-			DatabaseHelper.TABLE_RELATION_TYPES + "." + DatabaseHelper.TYPE_NAME
+			"C." + DatabaseHelper.ID,
+			"C." + DatabaseHelper.CLIENT_NAME,
+			"C." + DatabaseHelper.CLIENT_PHOTO_LINK,
+			"C." + DatabaseHelper.CLIENT_BIRTHDAY,
+			"C." + DatabaseHelper.CLIENT_STATUS_SUM,
+			"R." + DatabaseHelper.TYPE_NAME
 		};
 	
+	/*private String[] mDefaultColumns = {
+			DatabaseHelper.ID,
+			DatabaseHelper.CLIENT_NAME,
+			DatabaseHelper.CLIENT_PHOTO_LINK,
+			DatabaseHelper.CLIENT_BIRTHDAY,
+			DatabaseHelper.CLIENT_STATUS_SUM,
+			DatabaseHelper.TYPE_NAME
+		};*/
+	
 	public DatabaseWorker(Context context){
-		mDbConnector = new DatabaseConnector(context);
+		mDbConnector = DatabaseConnector.getInstance(context);
 		mCursorHalper = new DatabaseCursorHelper();
 	}
 	
@@ -58,9 +67,9 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 	
 	// ========== private methods ==========
 	
-	private synchronized StatusInfo addStatus(StatusInfo statusInfo) {
+	private StatusInfo addStatus(StatusInfo statusInfo) {
 		String[] columns = new String[] {DatabaseHelper.ID};
-		String selection = DatabaseHelper.STATUS_NAME + "=" + statusInfo.getStatusName();
+		String selection = DatabaseHelper.STATUS_NAME + "='" + statusInfo.getStatusName() + "'";
 		SQLiteDatabase db = mDbConnector.getDatabase();
 		db.beginTransaction();
 		Cursor cursor = null;
@@ -90,12 +99,12 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 		return statusInfo;
 	}
 	
-	private synchronized void deleteStatus(StatusInfo statusInfo) {
+	private void deleteStatus(StatusInfo statusInfo) {
 		String whereClause = DatabaseHelper.ID + "=" + statusInfo.getStatusInfoId();
 		mDbConnector.getDatabase().delete(DatabaseHelper.TABLE_CLIENTS_STATUSES, whereClause, null);
 	}
 	
-	private synchronized void loadAndCacheClientsList(String query){
+	private void loadAndCacheClientsList(String query){
 		Cursor cursor = mDbConnector.getDatabase().rawQuery(query, null);
 		mCachedCursor = cursor;
 	}
@@ -106,8 +115,59 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 	}
 	
 	private void clearCursorCache(){
-		this.mCachedCursor.close();
-		this.mCachedCursor = null;
+		if (this.mCachedCursor != null) {
+			this.mCachedCursor.close();
+			this.mCachedCursor = null;
+		}
+	}
+	
+	private List<StatusInfo> obtainNewStatusesForClient(SQLiteDatabase db, ClientInfo clientInfo){
+		List<StatusInfo> statuses = new ArrayList<StatusInfo>();
+		Cursor cursor = db.query(DatabaseHelper.TABLE_STATUSES, 
+				new String[] {DatabaseHelper.STATUS_NAME, DatabaseHelper.STATUS_WEIGHT},
+				null, null, null, null, null);
+		while (cursor.moveToNext()){
+			StatusInfo statusInfo = new StatusInfo(-1, clientInfo.getClientId(),
+					cursor.getString(0), cursor.getInt(1), false, false);
+			statusInfo = this.addStatus(statusInfo);
+			statuses.add(statusInfo);
+		}
+		cursor.close();
+		return statuses;
+	}
+	
+	private long obtainRelationTypeId(SQLiteDatabase db, ClientInfo clientInfo){
+		Cursor cursor = db.query(DatabaseHelper.TABLE_RELATION_TYPES,
+				new String[] {DatabaseHelper.ID}, 
+				String.format(DatabaseHelper.TYPE_NAME + "='%s'", clientInfo.getRelationType()), 
+				null, null, null, null);
+		cursor.moveToFirst();
+		long result = cursor.getLong(0);
+		cursor.close();
+		return result;
+	}
+	
+	private long obtainContactTypeId(SQLiteDatabase db, ContactInfo contactInfo){
+		Cursor cursor = db.query(DatabaseHelper.TABLE_CONTACT_TYPES,
+				new String[] {DatabaseHelper.ID}, 
+				String.format(DatabaseHelper.TYPE_NAME + "='%s'",  contactInfo.getContactType()), 
+				null, null, null, null);
+		cursor.moveToFirst();
+		long result = cursor.getLong(0);
+		cursor.close();
+		return result;
+	}
+	
+	private long pushNewClientData(SQLiteDatabase db, ClientInfo clientInfo){
+		ContentValues values = new ContentValues();
+		values.put(DatabaseHelper.CLIENT_NAME, clientInfo.getClientName());
+		values.put(DatabaseHelper.CLIENT_STATUS_SUM, clientInfo.getStatus());
+		values.put(DatabaseHelper.CLIENT_ABOUT, clientInfo.getClientAbout());
+		values.put(DatabaseHelper.CLIENT_BIRTHDAY, clientInfo.getBirthday());
+		values.put(DatabaseHelper.CLIENT_PHOTO_LINK, clientInfo.getPhotoUrl());
+		values.put(DatabaseHelper.CLIENT_PROFESSION, clientInfo.getClientProfession());
+		values.put(DatabaseHelper.RELATIOIN_ID, obtainRelationTypeId(db, clientInfo));
+		return db.insert(DatabaseHelper.TABLE_CLIENTS, null, values);
 	}
 	
 	// ========== public methods ==========
@@ -127,7 +187,7 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 		}
 		String fromTable = DatabaseHelper.TABLE_CLIENTS + " as C inner join "
 				+ DatabaseHelper.TABLE_RELATION_TYPES + " as R on C." 
-				+ DatabaseHelper.RELATIOIN_ID + "=T." + DatabaseHelper.ID;
+				+ DatabaseHelper.RELATIOIN_ID + "=R." + DatabaseHelper.ID;
 		String query = queryBuilder.build(fromTable, columns, params);
 		this.mCachedQuery = query;
 		Cursor result = null;
@@ -140,7 +200,7 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 		return result;
 	}
 	
-	public Cursor loadFilteredClientsList(String[] columns, String filter){
+	public synchronized Cursor loadFilteredClientsList(String[] columns, String filter){
 		Cursor result = null;
 		this.mCachedFilter = filter;
 		this.mCachedFilterColumns = columns;
@@ -156,27 +216,9 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 		clearCursorCache();
 		SQLiteDatabase db = mDbConnector.getDatabase();
 		db.beginTransaction();
-		Cursor cursor = null;
 		try {
-			cursor = db.query(DatabaseHelper.TABLE_STATUSES, 
-					new String[] {DatabaseHelper.STATUS_NAME, DatabaseHelper.STATUS_WEIGHT},
-					null, null, null, null, null);
-			List<StatusInfo> statuses = new ArrayList<StatusInfo>();
-			while (cursor.moveToNext()){
-				StatusInfo statusInfo = new StatusInfo(-1, clientInfo.getClientId(),
-						cursor.getString(0), cursor.getInt(1), false, false);
-				statusInfo = this.addStatus(statusInfo);
-				statuses.add(statusInfo);
-			}
-			clientInfo.setStatuses(statuses);
-			ContentValues values = new ContentValues();
-			values.put(DatabaseHelper.CLIENT_NAME, clientInfo.getClientName());
-			values.put(DatabaseHelper.CLIENT_STATUS_SUM, clientInfo.getStatus());
-			values.put(DatabaseHelper.CLIENT_ABOUT, clientInfo.getClientAbout());
-			values.put(DatabaseHelper.CLIENT_BIRTHDAY, clientInfo.getBirthday());
-			values.put(DatabaseHelper.CLIENT_PHOTO_LINK, clientInfo.getPhotoUrl());
-			values.put(DatabaseHelper.CLIENT_PROFESSION, clientInfo.getClientProfession());
-			long id = db.insert(DatabaseHelper.TABLE_CLIENTS, null, values);
+			clientInfo.setStatuses(this.obtainNewStatusesForClient(db, clientInfo));
+			long id = pushNewClientData(db, clientInfo);
 			if (id == -1) {
 				throw new Exception("The Client was not added!");
 			} else {
@@ -187,7 +229,6 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 			e.printStackTrace();
 		} finally {
 			db.endTransaction();
-			cursor.close();
 		}
 		return clientInfo;
 	}
@@ -238,17 +279,11 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 
 	@Override
 	public synchronized void updateContactType(ContactInfo contactInfo) {
-		String[] columns = new String[] {DatabaseHelper.ID};
-		String selection = DatabaseHelper.TYPE_NAME + "=" + contactInfo.getContactType();
 		SQLiteDatabase db = mDbConnector.getDatabase();
 		db.beginTransaction();
-		Cursor cursor = null;
 		try {
-			cursor = db.query(DatabaseHelper.TABLE_CONTACT_TYPES,
-					columns, selection, null, null, null, null);
-			cursor.moveToFirst();
 			ContentValues values = new ContentValues();
-			values.put(DatabaseHelper.TYPE_ID, cursor.getLong(0));
+			values.put(DatabaseHelper.TYPE_ID, obtainContactTypeId(db, contactInfo));
 			String whereClause = DatabaseHelper.ID + "=" + String.valueOf(contactInfo.getContactId());
 			db.update(DatabaseHelper.TABLE_CONTACTS, values, whereClause, null);
 			db.setTransactionSuccessful();
@@ -256,9 +291,6 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 			e.printStackTrace();
 		} finally {
 			db.endTransaction();
-			if (cursor != null) {
-				cursor.close();
-			}
 		}
 	}
 	
@@ -272,28 +304,19 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 
 	@Override
 	public synchronized void addContactInfo(ContactInfo contactInfo) {
-		String[] columns = new String[] {DatabaseHelper.ID};
-		String selection = DatabaseHelper.TYPE_NAME + "=" + contactInfo.getContactType();
 		SQLiteDatabase db = mDbConnector.getDatabase();
 		db.beginTransaction();
-		Cursor cursor = null;
 		try {
-			cursor = db.query(DatabaseHelper.TABLE_CONTACT_TYPES,
-					columns, selection, null, null, null, null);
-			cursor.moveToFirst();
 			ContentValues values = new ContentValues();
 			values.put(DatabaseHelper.CLIENT_ID, contactInfo.getClientId());
 			values.put(DatabaseHelper.CONTACT_VALUE, contactInfo.getContactValue());
-			values.put(DatabaseHelper.TYPE_ID, cursor.getLong(0));			
+			values.put(DatabaseHelper.TYPE_ID, this.obtainContactTypeId(db, contactInfo));			
 			mDbConnector.getDatabase().insert(DatabaseHelper.TABLE_CONTACTS, null, values);
 			db.setTransactionSuccessful();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			db.endTransaction();
-			if (cursor != null) {
-				cursor.close();
-			}
 		}
 	}
 
@@ -342,17 +365,12 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 	@Override
 	public synchronized void updateClientRelationType(ClientInfo clientInfo) {
 		clearCursorCache();
-		String[] columns = new String[] {DatabaseHelper.ID};
-		String selection = DatabaseHelper.TYPE_NAME + "=" + clientInfo.getRelationType();
 		SQLiteDatabase db = mDbConnector.getDatabase();
 		db.beginTransaction();
 		Cursor cursor = null;
 		try {
-			cursor = db.query(DatabaseHelper.TABLE_RELATION_TYPES,
-					columns, selection, null, null, null, null);
-			cursor.moveToFirst();
 			ContentValues values = new ContentValues();
-			values.put(DatabaseHelper.RELATIOIN_ID, cursor.getLong(0));
+			values.put(DatabaseHelper.RELATIOIN_ID, this.obtainRelationTypeId(db, clientInfo));
 			String whereClause = DatabaseHelper.ID + "=" + String.valueOf(clientInfo.getClientId());
 			db.update(DatabaseHelper.TABLE_CLIENTS, values, whereClause, null);
 			db.setTransactionSuccessful();
@@ -401,6 +419,5 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 		cursor.close();
 		return result;
 	}
-
 
 }

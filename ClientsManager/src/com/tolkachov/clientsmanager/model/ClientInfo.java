@@ -24,7 +24,7 @@ public class ClientInfo {
 	}
 	
 	public ClientInfo(BaseClientInfo baseClientInfo, String clientProfession, 
-			String clientAbout,	int status, String relationType) {
+			String clientAbout) {
 		super();
 		this.mBaseClientInfo = baseClientInfo;
 		this.mClientProfession = clientProfession;

@@ -54,7 +54,9 @@
             android:layout_width="60dp"
             android:layout_height="45dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:visibility="visible">
+        </com.tolkachov.clientsmanager.widget.LinearIndicator> 
         
         <TextView 
             android:id="@+id/client_relation_type"
