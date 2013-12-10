@@ -54,7 +54,7 @@ public class ClientsListFragment extends ListFragment implements LoaderCallbacks
 					if (i % 2 == 0) relationType = "Знакомый";
 					BaseClientInfo clientInfo = new BaseClientInfo(-1,
 							"Client " + String.valueOf(i), null, "11/1/1988", null, relationType);
-					//AppManager.getDatabaseWorker().addClient(new ClientInfo(clientInfo, null, null));
+					AppManager.getDatabaseWorker().addClient(new ClientInfo(clientInfo, null, null));
 				}
 				return null;
 			}
@@ -73,9 +73,8 @@ public class ClientsListFragment extends ListFragment implements LoaderCallbacks
 		return new CursorLoader(getActivity()){
 			@Override
 			public Cursor loadInBackground() {
-				//Cursor cursor = AppManager.getDatabaseWorker().loadClientsList(null, null);
-				//return cursor;
-				return null;
+				Cursor cursor = AppManager.getDatabaseWorker().loadClientsList(null, null);
+				return cursor;
 			}
 		};
 	}

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.tolkachov.clientsmanager.model.BaseClientInfo;
 import com.tolkachov.clientsmanager.model.ClientInfo;
 import com.tolkachov.clientsmanager.model.ContactInfo;
 import com.tolkachov.clientsmanager.model.ModelBaseInterface;
@@ -127,10 +128,11 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 				new String[] {DatabaseHelper.STATUS_NAME, DatabaseHelper.STATUS_WEIGHT},
 				null, null, null, null, null);
 		while (cursor.moveToNext()){
-			StatusInfo statusInfo = new StatusInfo(-1, clientInfo.getClientId(),
+			/*StatusInfo statusInfo = new StatusInfo(-1, clientInfo.getClientId(),
 					cursor.getString(0), cursor.getInt(1), false, false);
 			statusInfo = this.addStatus(statusInfo);
-			statuses.add(statusInfo);
+			statuses.add(statusInfo);*/
+			//TODO: fix it
 		}
 		cursor.close();
 		return statuses;
@@ -407,17 +409,32 @@ public class DatabaseWorker implements ModelBaseInterface, StatusInfo.StatusInfo
 		String query = String.format(QUERY_CLIENT_STATUSES, String.valueOf(clientInfo.getClientId()));
 		Cursor cursor = mDbConnector.getDatabase().rawQuery(query, null);
 		while (cursor.moveToNext()){
-			StatusInfo info = new StatusInfo(
+			/*StatusInfo info = new StatusInfo(
 					cursor.getLong(0),
 					cursor.getLong(1),
 					cursor.getString(2), 
 					cursor.getInt(3), 
 					cursor.getInt(4) == 1 ? true : false,
 					cursor.getInt(5) == 1 ? true : false);
-			result.add(info);
+			result.add(info);*/
+			//TODO: fix it
 		}
 		cursor.close();
 		return result;
+	}
+
+	
+	@Override
+	public ClientInfo obtainClientFromCuror(Cursor cursor) {
+		long clientId = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ID));
+		String clientName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_NAME));
+		String photoUrl = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_PHOTO_LINK));
+		String birthday = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_BIRTHDAY));
+		String status = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CLIENT_STATUS_SUM));
+		String relationType = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TYPE_NAME));
+		BaseClientInfo baseInfo = new BaseClientInfo(clientId, clientName, photoUrl, birthday, status, relationType); 
+		ClientInfo clientInfo = new ClientInfo(baseInfo, null, null);
+		return clientInfo;
 	}
 
 }

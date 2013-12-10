@@ -16,21 +16,12 @@
     <position height="-1" width="-1" x="328" y="328"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="4" language="java" name="com.tolkachov.clientsmanager.activity" project="ClientsManager" 
-    file="/ClientsManager/src/com/tolkachov/clientsmanager/activity" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="589" y="134"/>    
-    <display autosize="true" stereotype="true" accessors="true"/>  
-  </package>  
+  <dependency id="4">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
   <dependency id="5">    
     <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <dependency id="6">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <dependency id="7">    
-    <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

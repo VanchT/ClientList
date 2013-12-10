@@ -11,12 +11,13 @@ public class StatusInfo {
 	private int mStatusWeight;
 	private boolean mStatusState;
 	private boolean mIsMine;
+	private boolean mIsResult;
 	
 	private StatusInfoListener mListener;
 	private OnStatusChangeListener mStatusChangeListener;
 	
 	public StatusInfo(long statusInfoId, long clientId, String statusName,
-			int statusWeight, boolean statusState, boolean isMine) {
+			int statusWeight, boolean statusState, boolean isMine, boolean isResult) {
 		super();
 		this.mStatusInfoId = statusInfoId;
 		this.mClientId = clientId;
@@ -24,6 +25,7 @@ public class StatusInfo {
 		this.mStatusWeight = statusWeight;
 		this.mStatusState = statusState;
 		this.mIsMine = isMine;
+		this.setIsResult(isResult);
 		mListener = AppManager.getDatabaseWorker();
 	}
 
@@ -87,7 +89,21 @@ public class StatusInfo {
 		mListener.updateIsMineState(this);
 		mStatusChangeListener.onStatusChange();
 	}
-		
+	
+	/**
+	 * @return the mIsResult
+	 */
+	public boolean isResult() {
+		return mIsResult;
+	}
+
+	/**
+	 * @param mIsResult the mIsResult to set
+	 */
+	public void setIsResult(boolean isResult) {
+		this.mIsResult = isResult;
+	}
+
 	public void setOnStatusChangeListener(OnStatusChangeListener listener){
 		this.mStatusChangeListener = listener;
 	}

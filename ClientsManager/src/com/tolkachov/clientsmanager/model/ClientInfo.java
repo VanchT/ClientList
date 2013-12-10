@@ -3,6 +3,8 @@ package com.tolkachov.clientsmanager.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.database.Cursor;
+
 import com.tolkachov.clientsmanager.AppManager;
 import com.tolkachov.clientsmanager.model.BaseClientInfo.OnStatusChangeListener;
 
@@ -154,6 +156,10 @@ public class ClientInfo {
 		return mBaseClientInfo.getRelationType();
 	}
 
+	public BaseClientInfo getBaseClientInfo(){
+		return this.mBaseClientInfo;
+	}
+	
 	//=======================================
 	
 	public void setOnStatusChangeListener(OnStatusChangeListener listener){
@@ -176,6 +182,7 @@ public class ClientInfo {
 		
 		public List<StatusInfo> loadClientStatuses(ClientInfo clientInfo);
 		
+		public ClientInfo obtainClientFromCuror(Cursor cursor);
 	}
 	
 	

@@ -1,6 +1,7 @@
 package com.tolkachov.clientsmanager.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -32,6 +33,7 @@ public class MainActivity extends Activity implements ClientsFragmentListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
 		return true;
 	}
 
@@ -47,8 +49,8 @@ public class MainActivity extends Activity implements ClientsFragmentListener {
 
 	@Override
 	public void onClientSelected() {
-		// TODO Auto-generated method stub
-		
+		Intent intent = new Intent(MainActivity.this, ClientInfoActivity.class);
+		startActivity(intent);
 	}
 
 }
